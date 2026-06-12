@@ -1,0 +1,220 @@
+/* =====================================================================
+   STYLE — Le Songo (versions locale et distante partagent ce style)
+   Ambiance : plateau de Songo en bois sculpté, graines couleur os.
+   ===================================================================== */
+
+:root {
+  --bois-fond:    #241710;   /* fond de page, bois très sombre */
+  --bois-plateau: #6b4423;   /* le panneau du plateau */
+  --bois-clair:   #8a5a2e;   /* reliefs du bois */
+  --cuvette:      #3c2614;   /* creux des cases */
+  --cuvette-bord: #5a3a1f;
+  --graine:       #e9dcbf;   /* graines (os / ivoire) */
+  --graine-bord:  #c9b489;
+  --or:           #e0a93f;   /* accent : tour actif, sélection */
+  --vert:         #7fae5a;   /* accent : coups jouables */
+  --rouge:        #cf6b4a;   /* accent : prise / alerte */
+  --texte:        #f3e9d6;
+  --texte-doux:   #c9b79a;
+  --rayon:        14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--texte);
+  background:
+    radial-gradient(circle at 50% 0%, #3a2616 0%, var(--bois-fond) 70%);
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+}
+
+.app { max-width: 920px; margin: 0 auto; }
+
+/* ---------- En-tête ---------- */
+.entete { text-align: center; margin-bottom: 18px; }
+.entete h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: var(--graine);
+  text-shadow: 0 2px 0 #1c120a;
+}
+.sous-titre { margin: 4px 0 0; color: var(--texte-doux); }
+
+/* ---------- Scores ---------- */
+.scores {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; margin: 0 auto 14px; flex-wrap: wrap;
+}
+.score-carte {
+  display: flex; flex-direction: column; align-items: center;
+  background: linear-gradient(160deg, var(--bois-clair), var(--bois-plateau));
+  border: 2px solid #4a2f17; border-radius: var(--rayon);
+  padding: 10px 22px; min-width: 130px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 10px rgba(0,0,0,0.4);
+}
+.score-nom { font-weight: 700; letter-spacing: 0.1em; color: var(--texte-doux); }
+.score-valeur { font-size: 2.4rem; font-weight: 800; line-height: 1.1; color: var(--graine); }
+.score-legende { font-size: 0.72rem; color: var(--texte-doux); }
+.objectif { font-size: 0.85rem; color: var(--texte-doux); text-align: center; }
+/* la carte du joueur dont c'est le tour s'illumine */
+.score-carte.actif { border-color: var(--or); box-shadow: 0 0 0 2px var(--or), 0 4px 14px rgba(0,0,0,0.5); }
+
+/* ---------- Indicateur de tour ---------- */
+.tour { text-align: center; font-size: 1.1rem; margin: 6px 0 16px; color: var(--texte-doux); }
+.tour strong { color: var(--or); }
+
+/* ---------- Plateau ---------- */
+.plateau {
+  position: relative;
+  background: linear-gradient(155deg, var(--bois-clair) 0%, var(--bois-plateau) 45%, #573619 100%);
+  border-radius: 28px;
+  padding: 30px 26px;
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.15),
+    inset 0 -8px 18px rgba(0,0,0,0.45),
+    0 18px 40px rgba(0,0,0,0.55);
+  border: 3px solid #432a13;
+}
+.camp-etiquette {
+  position: absolute; font-size: 0.78rem; letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.45); font-weight: 700;
+}
+.etiquette-nord { top: 8px; left: 50%; transform: translateX(-50%); }
+.etiquette-sud  { bottom: 8px; left: 50%; transform: translateX(-50%); }
+
+.rangee {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 12px; margin: 12px 0;
+}
+
+/* ---------- Une case (cuvette) ---------- */
+.case {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: none; cursor: default;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 38%, var(--cuvette) 0%, var(--cuvette) 55%, var(--cuvette-bord) 100%);
+  box-shadow:
+    inset 0 6px 12px rgba(0,0,0,0.65),
+    inset 0 -2px 3px rgba(255,255,255,0.08),
+    0 1px 0 rgba(255,255,255,0.06);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--graine);
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+  padding: 0;
+}
+.case .nombre {
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+  font-weight: 800; line-height: 1; z-index: 2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.case .etiquette-case {
+  position: absolute; bottom: 6%; font-size: 0.62rem;
+  color: rgba(255,255,255,0.4); z-index: 2;
+}
+/* petites graines décoratives autour du nombre */
+.case .graines { position: absolute; inset: 14%; z-index: 1; }
+.case .graine-pt {
+  position: absolute; width: 16%; height: 16%; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff7e6, var(--graine) 55%, var(--graine-bord));
+  box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+}
+
+/* Case jouable par le joueur courant */
+.case.jouable {
+  cursor: pointer;
+  box-shadow:
+    inset 0 6px 12px rgba(0,0,0,0.6),
+    0 0 0 3px var(--vert), 0 0 14px rgba(127,174,90,0.55);
+}
+.case.jouable:hover { transform: translateY(-3px) scale(1.03); }
+.case.jouable:focus-visible { outline: 3px solid var(--or); outline-offset: 2px; }
+
+/* Mise en évidence du dernier coup et des prises */
+.case.depart   { box-shadow: inset 0 6px 12px rgba(0,0,0,0.6), 0 0 0 3px var(--or); }
+.case.recoltee { animation: prise 0.7s ease; }
+@keyframes prise {
+  0%   { box-shadow: inset 0 6px 12px rgba(0,0,0,0.6), 0 0 0 4px var(--rouge), 0 0 22px var(--rouge); }
+  100% { box-shadow: inset 0 6px 12px rgba(0,0,0,0.6); }
+}
+
+/* ---------- Journal ---------- */
+.journal {
+  margin: 18px auto 0; max-width: 760px; text-align: center;
+  background: rgba(0,0,0,0.25); border-radius: var(--rayon);
+  padding: 12px 16px; min-height: 1.5em; color: var(--texte);
+}
+.journal .prise-txt { color: var(--rouge); font-weight: 700; }
+.journal .gagne { color: var(--or); font-weight: 800; }
+
+/* ---------- Commandes ---------- */
+.commandes {
+  display: flex; gap: 12px; justify-content: center; align-items: center;
+  margin-top: 18px; flex-wrap: wrap;
+}
+.commandes label { color: var(--texte-doux); }
+select, button {
+  font: inherit; padding: 9px 16px; border-radius: 10px;
+  border: 2px solid #4a2f17; background: var(--bois-clair); color: var(--texte);
+  cursor: pointer;
+}
+button { font-weight: 700; }
+button:hover { background: var(--bois-plateau); }
+button.secondaire { background: transparent; }
+select { background: var(--cuvette); }
+
+/* ---------- Règles ---------- */
+.regles {
+  max-width: 760px; margin: 18px auto 0;
+  background: rgba(0,0,0,0.28); border-radius: var(--rayon); padding: 14px 22px;
+}
+.regles h2 { margin: 4px 0 8px; color: var(--graine); font-family: Georgia, serif; }
+.regles ul { margin: 0; padding-left: 18px; line-height: 1.55; color: var(--texte-doux); }
+
+@media (prefers-reduced-motion: reduce) {
+  .case, .case.jouable:hover { transition: none; transform: none; }
+  .case.recoltee { animation: none; }
+}
+
+@media (max-width: 560px) {
+  .rangee { gap: 7px; }
+  .plateau { padding: 26px 12px; }
+}
+
+/* ===================================================================
+   STYLE SPÉCIFIQUE À LA VERSION DISTANTE (salon + bandeau)
+   =================================================================== */
+.salon {
+  display: flex; gap: 18px; justify-content: center; align-items: stretch;
+  flex-wrap: wrap; margin: 10px auto 0; max-width: 760px;
+}
+.salon-bloc {
+  background: linear-gradient(160deg, var(--bois-clair), var(--bois-plateau));
+  border: 2px solid #4a2f17; border-radius: var(--rayon);
+  padding: 18px 22px; flex: 1 1 280px; display: flex;
+  flex-direction: column; gap: 12px; align-items: flex-start;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 6px 14px rgba(0,0,0,0.4);
+}
+.salon-bloc h2 { margin: 0; font-family: Georgia, serif; color: var(--graine); font-size: 1.2rem; }
+.salon-bloc label { color: var(--texte-doux); display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.salon-bloc input { font: inherit; padding: 9px 12px; border-radius: 10px;
+  border: 2px solid #4a2f17; background: var(--cuvette); color: var(--texte);
+  letter-spacing: 0.18em; text-transform: uppercase; }
+.salon-bloc button { align-self: stretch; }
+.salon-sep { align-self: center; color: var(--texte-doux); font-style: italic; }
+
+.bandeau {
+  display: flex; gap: 22px; justify-content: center; flex-wrap: wrap;
+  background: rgba(0,0,0,0.28); border-radius: var(--rayon);
+  padding: 10px 16px; margin: 0 auto 14px; max-width: 760px; color: var(--texte-doux);
+}
+.bandeau strong { color: var(--graine); letter-spacing: 0.1em; }
+.info-co { color: var(--rouge); }
+.info-co.ok { color: var(--vert); }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Le Songo — Version distante (Ajax)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="entete">
+      <h1>Le Songo</h1>
+      <p class="sous-titre">Version distante — deux joueurs, deux écrans, via Ajax</p>
+    </header>
+
+    <!-- ÉCRAN 1 : SALON (création / connexion à une partie) -->
+    <section class="salon" id="salon">
+      <div class="salon-bloc">
+        <h2>Créer une partie</h2>
+        <label>Je joue le camp :
+          <select id="creer-camp">
+            <option value="SUD">SUD</option>
+            <option value="NORD">NORD</option>
+          </select>
+        </label>
+        <label>Premier à jouer :
+          <select id="creer-premier">
+            <option value="SUD">SUD</option>
+            <option value="NORD">NORD</option>
+          </select>
+        </label>
+        <button id="btn-creer">Créer</button>
+      </div>
+
+      <div class="salon-sep">ou</div>
+
+      <div class="salon-bloc">
+        <h2>Rejoindre une partie</h2>
+        <label>Code de la partie :
+          <input id="rejoindre-id" type="text" maxlength="12" placeholder="ex. A1B2C" />
+        </label>
+        <button id="btn-rejoindre">Rejoindre</button>
+      </div>
+    </section>
+
+    <!-- Bandeau d'information de la partie en cours -->
+    <section class="bandeau" id="bandeau" hidden>
+      <span>Code partie : <strong id="info-id">—</strong></span>
+      <span>Vous jouez : <strong id="info-role">—</strong></span>
+      <span id="info-connexion" class="info-co">en attente de l'adversaire…</span>
+    </section>
+
+    <!-- ÉCRAN 2 : LA PARTIE -->
+    <div id="jeu" hidden>
+      <section class="scores" aria-label="Scores">
+        <div class="score-carte" id="carte-NORD">
+          <span class="score-nom">NORD</span>
+          <span class="score-valeur" id="score-NORD">0</span>
+          <span class="score-legende">graines récoltées</span>
+        </div>
+        <div class="objectif">objectif&nbsp;: 40 / 70</div>
+        <div class="score-carte" id="carte-SUD">
+          <span class="score-nom">SUD</span>
+          <span class="score-valeur" id="score-SUD">0</span>
+          <span class="score-legende">graines récoltées</span>
+        </div>
+      </section>
+
+      <p class="tour" id="indicateur-tour">—</p>
+
+      <main class="plateau" id="plateau">
+        <div class="camp-etiquette etiquette-nord">NORD</div>
+        <div class="rangee" id="rangee-nord"></div>
+        <div class="rangee" id="rangee-sud"></div>
+        <div class="camp-etiquette etiquette-sud">SUD</div>
+      </main>
+
+      <section class="journal" aria-live="polite">
+        <p id="message">En attente…</p>
+      </section>
+
+      <section class="commandes">
+        <button id="btn-quitter" class="secondaire">Quitter la partie</button>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Le MÊME moteur que la version locale, puis le contrôleur réseau -->
+  <script src="engine.js"></script>
+  <script src="remote.js"></script>
+</body>
+</html>

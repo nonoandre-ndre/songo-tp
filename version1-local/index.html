@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Le Songo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <div class="langue">
+      <button id="btn-musique" class="son-btn" title="Musique" aria-label="Musique">♪</button>
+      <button id="btn-son" class="son-btn actif" title="Effets sonores" aria-label="Effets sonores">🔊</button>
+      <button id="lang-fr" class="lang-btn actif">FR</button>
+      <button id="lang-en" class="lang-btn">EN</button>
+    </div>
+
+    <header class="entete">
+      <h1>Le Songo</h1>
+      <p class="sous-titre" data-i18n="sous_titre"></p>
+      <button id="btn-origine" class="lien-origine" data-i18n="origine_btn"></button>
+    </header>
+
+    <aside class="origine" id="bloc-origine" hidden>
+      <p data-i18n="origine_txt"></p>
+    </aside>
+
+    <section class="config">
+      <div class="config-ligne">
+        <span class="config-label" data-i18n="mode_label"></span>
+        <div class="segment" id="seg-mode">
+          <button class="seg-btn actif" data-mode="2j" data-i18n="mode_2j"></button>
+          <button class="seg-btn" data-mode="ia" data-i18n="mode_ia"></button>
+        </div>
+      </div>
+
+      <div class="config-ligne" id="ligne-ia" hidden>
+        <label class="config-label"><span data-i18n="cote_label"></span>
+          <select id="cote-humain">
+            <option value="SUD">SUD</option>
+            <option value="NORD">NORD</option>
+          </select>
+        </label>
+        <label class="config-label"><span data-i18n="diff_label"></span>
+          <select id="difficulte">
+            <option value="facile" data-i18n="diff_facile"></option>
+            <option value="moyen" selected data-i18n="diff_moyen"></option>
+            <option value="difficile" data-i18n="diff_difficile"></option>
+            <option value="expert" data-i18n="diff_expert"></option>
+          </select>
+        </label>
+      </div>
+
+      <div class="config-ligne" id="ligne-noms">
+        <label class="config-label"><span id="lbl-nom-SUD"></span>
+          <input id="nom-SUD" type="text" maxlength="14" autocomplete="off" />
+        </label>
+        <label class="config-label"><span id="lbl-nom-NORD"></span>
+          <input id="nom-NORD" type="text" maxlength="14" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="config-ligne">
+        <label class="config-label"><span data-i18n="premier_label"></span>
+          <select id="premier-joueur">
+            <option value="SUD">SUD</option>
+            <option value="NORD">NORD</option>
+          </select>
+        </label>
+        <button id="btn-lancer" class="principal"></button>
+        <button id="btn-tuto" data-i18n="btn_tuto"></button>
+        <button id="btn-guide" data-i18n="btn_guide"></button>
+        <button id="btn-stats" class="secondaire" data-i18n="btn_stats"></button>
+      </div>
+    </section>
+
+    <section class="scores" aria-label="Scores">
+      <div class="score-carte" id="carte-NORD">
+        <span class="score-nom" id="aff-nom-NORD">NORD</span>
+        <span class="score-valeur" id="score-NORD">0</span>
+        <span class="score-legende" data-i18n="recoltees"></span>
+      </div>
+      <div class="objectif"><span data-i18n="objectif"></span></div>
+      <div class="score-carte" id="carte-SUD">
+        <span class="score-nom" id="aff-nom-SUD">SUD</span>
+        <span class="score-valeur" id="score-SUD">0</span>
+        <span class="score-legende" data-i18n="recoltees"></span>
+      </div>
+    </section>
+
+    <!-- Chronomètre (pendule de jeu) -->
+    <div class="chrono" id="chrono">
+      <div class="chrono-cote" id="chrono-cote-NORD">
+        <span class="chrono-nom" id="chrono-nom-NORD">NORD</span>
+        <span class="chrono-val" id="chrono-val-NORD">00:00</span>
+      </div>
+      <div class="chrono-total">
+        <span class="chrono-total-lbl" data-i18n="temps_partie"></span>
+        <span id="chrono-total">00:00</span>
+      </div>
+      <div class="chrono-cote" id="chrono-cote-SUD">
+        <span class="chrono-nom" id="chrono-nom-SUD">SUD</span>
+        <span class="chrono-val" id="chrono-val-SUD">00:00</span>
+      </div>
+    </div>
+
+    <p class="tour" id="indicateur-tour"></p>
+
+    <div class="plateau-zone">
+      <div class="grenier" id="grenier-gauche">
+        <span class="grenier-titre" data-i18n="grenier"></span>
+        <span class="grenier-val" id="grenier-NORD">0</span>
+        <span class="grenier-nom">NORD</span>
+      </div>
+
+      <main class="plateau" id="plateau">
+        <div class="camp-etiquette etiquette-nord">NORD</div>
+        <div class="rangee" id="rangee-nord"></div>
+        <div class="rangee" id="rangee-sud"></div>
+        <div class="camp-etiquette etiquette-sud">SUD</div>
+      </main>
+
+      <div class="grenier" id="grenier-droite">
+        <span class="grenier-titre" data-i18n="grenier"></span>
+        <span class="grenier-val" id="grenier-SUD">0</span>
+        <span class="grenier-nom">SUD</span>
+      </div>
+    </div>
+
+    <section class="journal" aria-live="polite">
+      <p id="message"></p>
+    </section>
+  </div>
+
+  <!-- Barre du tutoriel -->
+  <div class="tuto-barre" id="tuto-barre" hidden>
+    <div class="tuto-contenu">
+      <p id="tuto-texte"></p>
+      <div class="tuto-actions">
+        <button id="tuto-prec" data-i18n="tuto_prec"></button>
+        <span id="tuto-progres" class="tuto-progres"></span>
+        <button id="tuto-suiv" class="principal" data-i18n="tuto_suiv"></button>
+        <button id="tuto-quitter" class="secondaire" data-i18n="tuto_quitter"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fenêtre modale réutilisable (guide / stats / confirmations) -->
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <header class="modal-tete">
+        <h2 id="modal-titre"></h2>
+        <button id="modal-x" class="modal-x" aria-label="Fermer">×</button>
+      </header>
+      <div class="modal-corps" id="modal-corps"></div>
+      <footer class="modal-pied" id="modal-pied"></footer>
+    </div>
+  </div>
+
+  <script src="engine.js"></script>
+  <script src="ai.js"></script>
+  <script src="stats.js"></script>
+  <script src="sound.js"></script>
+  <script src="local.js"></script>
+</body>
+</html>
